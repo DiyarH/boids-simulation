@@ -7,9 +7,18 @@ public class BoidController : MonoBehaviour
     public float minInitialSpeed;
     public float maxInitialSpeed;
     public Rigidbody2D rigidbody;
+    public float alignmentPower;
+    public Collider2D collider;
+    ContactFilter2D contactFilter;
+    [SerializeField]
+    private Vector2 alignmentVelocity;
     // Start is called before the first frame update
     void Start()
     {
+        
+
+        contactFilter = new ContactFilter2D();
+        contactFilter.useTriggers = true;
         //rigidbody.rotation = Random.Range(-180, 180);
         transform.Rotate(0, 0, Random.Range(-180, 180));
         rigidbody.velocity = (Vector2)transform.up * Random.Range(minInitialSpeed, maxInitialSpeed);
@@ -26,5 +35,24 @@ public class BoidController : MonoBehaviour
             transform.position = new Vector3(transform.position.x, +5.1f);
         if (transform.position.y >= +5.2)
             transform.position = new Vector3(transform.position.x, -5.1f);
+
+        var totalNeighborVelocity = Vector2.zero;
+        List<Collider2D> collisionList = new List<Collider2D>();
+        int boidCollisionCount = 0;
+        collider.OverlapCollider(contactFilter, collisionList);
+        foreach (var collision in collisionList)
+        {
+            if (collision.gameObject.CompareTag("Boid"))
+            {
+                ++boidCollisionCount;
+                totalNeighborVelocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
+            }
+        }
+        if (boidCollisionCount > 0)
+            alignmentVelocity = totalNeighborVelocity / boidCollisionCount;
+        else
+            alignmentVelocity = Vector2.zero;
+        var acceleration = (alignmentVelocity - rigidbody.velocity) * alignmentPower;
+        rigidbody.velocity += acceleration * Time.deltaTime;
     }
 }
