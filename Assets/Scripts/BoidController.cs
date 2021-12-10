@@ -7,37 +7,26 @@ public class BoidController : MonoBehaviour
     public float minInitialSpeed;
     public float maxInitialSpeed;
     public Rigidbody2D rigidbody;
-    [Range(0, 5)]
-    public float alignmentPower;
-    [Range(0, 5)]
-    public float cohesionPower;
-    [Range(0, 5)]
-    public float separationPower;
-    [Range(0, 180)]
-    public float viewAngle;
     public Collider2D collider;
     ContactFilter2D contactFilter;
-    [SerializeField]
-    private Vector2 alignmentVelocity;
-    [SerializeField]
-    private Vector2 cohesionVelocity;
-    [SerializeField]
-    private Vector2 separationVelocity;
+    public Vector2 alignmentVelocity;
+    public Vector2 cohesionVelocity;
+    public Vector2 separationVelocity;
+    public int neighborBoidCount;
     // Start is called before the first frame update
     void Start()
     {
-        
-
         contactFilter = new ContactFilter2D();
         contactFilter.useTriggers = true;
         rigidbody.rotation = Random.Range(-180, 180);
         //transform.Rotate(0, 0, Random.Range(-180, 180));
         //transform.LookAt(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)));
-        rigidbody.velocity = (Vector2)transform.up * Random.Range(minInitialSpeed, maxInitialSpeed);
+        var speed = Random.Range(minInitialSpeed, maxInitialSpeed);
+        rigidbody.velocity = new Vector2(speed * -Mathf.Sin(rigidbody.rotation * Mathf.PI / 180)
+                                       , speed * Mathf.Cos(rigidbody.rotation * Mathf.PI / 180));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateVelocity()
     {
         if (transform.position.x < -9.2)
             transform.position = new Vector3(+9.1f, transform.position.y);
@@ -53,13 +42,13 @@ public class BoidController : MonoBehaviour
         separationVelocity = Vector2.zero;
 
         List<Collider2D> collisionList = new List<Collider2D>();
-        int boidCollisionCount = 0;
+        neighborBoidCount = 0;
         collider.OverlapCollider(contactFilter, collisionList);
         foreach (var collision in collisionList)
         {
             if (collision.gameObject.CompareTag("Boid"))
             {
-                ++boidCollisionCount;
+                ++neighborBoidCount;
                 totalNeighborVelocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
                 totalNeighborPosition += (Vector2)collision.gameObject.transform.position;
                 Vector2 distanceVector = collision.gameObject.transform.position - transform.position;
@@ -67,22 +56,16 @@ public class BoidController : MonoBehaviour
                 separationVelocity -= (1 / distance) * distanceVector.normalized;
             }
         }
-        if (boidCollisionCount > 0)
+        if (neighborBoidCount > 0)
         {
-            alignmentVelocity = totalNeighborVelocity / boidCollisionCount;
-            cohesionVelocity = totalNeighborPosition / boidCollisionCount;
-
-            var acceleration = (alignmentVelocity - rigidbody.velocity).normalized * alignmentPower
-                + (cohesionVelocity - rigidbody.velocity).normalized * cohesionPower
-                + (separationVelocity - rigidbody.velocity).normalized * separationPower;
-            rigidbody.velocity += acceleration * Time.deltaTime;
+            alignmentVelocity = totalNeighborVelocity / neighborBoidCount;
+            cohesionVelocity = totalNeighborPosition / neighborBoidCount;
         }
         else
         {
             alignmentVelocity = Vector2.zero;
             cohesionVelocity = Vector2.zero;
         }
-        //transform.LookAt(new Vector3(rigidbody.velocity.x, rigidbody.velocity.y));
-        rigidbody.rotation = -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI;
+        //rigidbody.rotation = -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI;
     }
 }
