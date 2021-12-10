@@ -70,9 +70,9 @@ MonoBehaviour:
   minInitialSpeed: 0.5
   maxInitialSpeed: 1
   rigidbody: {fileID: 3142299804560266431}
-  alignmentPower: 0.1
-  cohesionPower: 0.1
-  separationPower: 0.1
+  alignmentPower: 3
+  cohesionPower: 1.5
+  separationPower: 2.5
   collider: {fileID: -8658171172659847412}
   alignmentVelocity: {x: 0, y: 0}
   cohesionVelocity: {x: 0, y: 0}

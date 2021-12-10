@@ -7,8 +7,11 @@ public class BoidController : MonoBehaviour
     public float minInitialSpeed;
     public float maxInitialSpeed;
     public Rigidbody2D rigidbody;
+    [Range(0, 5)]
     public float alignmentPower;
+    [Range(0, 5)]
     public float cohesionPower;
+    [Range(0, 5)]
     public float separationPower;
     public Collider2D collider;
     ContactFilter2D contactFilter;
@@ -33,13 +36,13 @@ public class BoidController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.x <= -9.2)
+        if (transform.position.x < -9.2)
             transform.position = new Vector3(+9.1f, transform.position.y);
-        if (transform.position.x >= +9.2)
+        if (transform.position.x > +9.2)
             transform.position = new Vector3(-9.1f, transform.position.y);
-        if (transform.position.y <= -5.2)
+        if (transform.position.y < -5.2)
             transform.position = new Vector3(transform.position.x, +5.1f);
-        if (transform.position.y >= +5.2)
+        if (transform.position.y > +5.2)
             transform.position = new Vector3(transform.position.x, -5.1f);
 
         var totalNeighborVelocity = Vector2.zero;
@@ -58,7 +61,7 @@ public class BoidController : MonoBehaviour
                 totalNeighborPosition += (Vector2)collision.gameObject.transform.position;
                 Vector2 distanceVector = collision.gameObject.transform.position - transform.position;
                 var distance = distanceVector.magnitude;
-                separationVelocity -= (1 / (distance + 1)) * distanceVector.normalized;
+                separationVelocity -= (1 / distance) * distanceVector.normalized;
             }
         }
         if (boidCollisionCount > 0)
@@ -66,9 +69,9 @@ public class BoidController : MonoBehaviour
             alignmentVelocity = totalNeighborVelocity / boidCollisionCount;
             cohesionVelocity = totalNeighborPosition / boidCollisionCount;
 
-            var acceleration = (alignmentVelocity - rigidbody.velocity) * alignmentPower
-                + (cohesionVelocity - rigidbody.velocity) * cohesionPower
-                + (separationVelocity - rigidbody.velocity) * separationPower;
+            var acceleration = (alignmentVelocity - rigidbody.velocity).normalized * alignmentPower
+                + (cohesionVelocity - rigidbody.velocity).normalized * cohesionPower
+                + (separationVelocity - rigidbody.velocity).normalized * separationPower;
             rigidbody.velocity += acceleration * Time.deltaTime;
         }
         else
