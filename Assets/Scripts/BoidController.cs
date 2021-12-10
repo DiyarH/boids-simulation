@@ -8,10 +8,13 @@ public class BoidController : MonoBehaviour
     public float maxInitialSpeed;
     public Rigidbody2D rigidbody;
     public float alignmentPower;
+    public float cohesionPower;
     public Collider2D collider;
     ContactFilter2D contactFilter;
     [SerializeField]
     private Vector2 alignmentVelocity;
+    [SerializeField]
+    private Vector2 cohesionVelocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,7 @@ public class BoidController : MonoBehaviour
             transform.position = new Vector3(transform.position.x, -5.1f);
 
         var totalNeighborVelocity = Vector2.zero;
+        var totalNeighborPosition = Vector2.zero;
         List<Collider2D> collisionList = new List<Collider2D>();
         int boidCollisionCount = 0;
         collider.OverlapCollider(contactFilter, collisionList);
@@ -46,13 +50,23 @@ public class BoidController : MonoBehaviour
             {
                 ++boidCollisionCount;
                 totalNeighborVelocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
+                totalNeighborPosition += (Vector2)collision.gameObject.transform.position;
             }
         }
         if (boidCollisionCount > 0)
+        {
             alignmentVelocity = totalNeighborVelocity / boidCollisionCount;
+            cohesionVelocity = totalNeighborPosition / boidCollisionCount;
+
+            var acceleration = (alignmentVelocity - rigidbody.velocity) * alignmentPower
+                + (cohesionVelocity - rigidbody.velocity) * cohesionPower;
+            rigidbody.velocity += acceleration * Time.deltaTime;
+        }
         else
+        {
             alignmentVelocity = Vector2.zero;
-        var acceleration = (alignmentVelocity - rigidbody.velocity) * alignmentPower;
-        rigidbody.velocity += acceleration * Time.deltaTime;
+
+        }
+        
     }
 }
