@@ -22,8 +22,8 @@ public class BoidController : MonoBehaviour
         //transform.Rotate(0, 0, Random.Range(-180, 180));
         //transform.LookAt(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)));
         var speed = Random.Range(minInitialSpeed, maxInitialSpeed);
-        rigidbody.velocity = new Vector2(speed * -Mathf.Sin(rigidbody.rotation * Mathf.PI / 180)
-                                       , speed * Mathf.Cos(rigidbody.rotation * Mathf.PI / 180));
+        rigidbody.velocity = new Vector2(speed * -Mathf.Sin(rigidbody.rotation * Mathf.PI / 180),
+                                        speed * Mathf.Cos(rigidbody.rotation * Mathf.PI / 180));
     }
 
     public void UpdateVelocity()
@@ -58,14 +58,14 @@ public class BoidController : MonoBehaviour
         }
         if (neighborBoidCount > 0)
         {
-            alignmentVelocity = totalNeighborVelocity / neighborBoidCount;
-            cohesionVelocity = totalNeighborPosition / neighborBoidCount;
+            alignmentVelocity = (totalNeighborVelocity / neighborBoidCount) - rigidbody.velocity;
+            cohesionVelocity = (totalNeighborPosition / neighborBoidCount) - (Vector2)transform.position;
         }
         else
         {
             alignmentVelocity = Vector2.zero;
             cohesionVelocity = Vector2.zero;
         }
-        //rigidbody.rotation = -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI;
+        transform.rotation.Set(0, 0, -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI, 0);
     }
 }

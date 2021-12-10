@@ -35,9 +35,9 @@ public class BoidSpawner : MonoBehaviour
         for (int i = 0; i < boidCount; ++i)
         {
             boids[i].UpdateVelocity();
-            accelerations[i] = (boids[i].alignmentVelocity - boids[i].rigidbody.velocity).normalized * alignmentPower
-                            + (boids[i].cohesionVelocity - boids[i].rigidbody.velocity).normalized * cohesionPower
-                            + (boids[i].separationVelocity - boids[i].rigidbody.velocity).normalized * separationPower;
+            accelerations[i] = boids[i].alignmentVelocity.normalized * alignmentPower
+                            + boids[i].cohesionVelocity.normalized * cohesionPower
+                            + boids[i].separationVelocity.normalized * separationPower;
         }
         for (int i = 0; i < boidCount; ++i)
             boids[i].rigidbody.velocity += accelerations[i] * Time.deltaTime;
