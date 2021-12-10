@@ -18,6 +18,13 @@ public class BoidController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (transform.position.x <= -9.2)
+            transform.position = new Vector3(+9.1f, transform.position.y);
+        if (transform.position.x >= +9.2)
+            transform.position = new Vector3(-9.1f, transform.position.y);
+        if (transform.position.y <= -5.2)
+            transform.position = new Vector3(transform.position.x, +5.1f);
+        if (transform.position.y >= +5.2)
+            transform.position = new Vector3(transform.position.x, -5.1f);
     }
 }
