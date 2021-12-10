@@ -12,6 +12,10 @@ public class BoidSpawner : MonoBehaviour
     public float cohesionPower;
     [Range(0, 10)]
     public float separationPower;
+    [Range(0, 10)]
+    public float totalPower;
+    [Range(0, 2)]
+    public float viewRadius;
     [Range(0, 180)]
     public float viewAngle;
     private BoidController[] boids;
@@ -26,6 +30,7 @@ public class BoidSpawner : MonoBehaviour
             var x = Random.Range(-9.0f, +9.0f);
             var y = Random.Range(-5.0f, +5.0f);
             boids[i] = Instantiate(boidPrefab, new Vector3(x, y), transform.rotation);
+            boids[i].GetComponent<CircleCollider2D>().radius = viewRadius;
         }
     }
 
@@ -40,6 +45,6 @@ public class BoidSpawner : MonoBehaviour
                             + boids[i].separationVelocity.normalized * separationPower;
         }
         for (int i = 0; i < boidCount; ++i)
-            boids[i].rigidbody.velocity += accelerations[i] * Time.deltaTime;
+            boids[i].rigidbody.velocity += accelerations[i] * totalPower * Time.deltaTime;
     }
 }

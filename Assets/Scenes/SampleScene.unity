@@ -239,6 +239,8 @@ MonoBehaviour:
   alignmentPower: 0
   cohesionPower: 0
   separationPower: 0
+  totalPower: 1
+  viewRadius: 0.5
   viewAngle: 0
 --- !u!4 &1650273607
 Transform:
