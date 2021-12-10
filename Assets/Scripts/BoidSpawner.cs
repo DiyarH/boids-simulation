@@ -6,11 +6,11 @@ public class BoidSpawner : MonoBehaviour
 {
     public BoidController boidPrefab;
     public int boidCount;
-    [Range(0, 5)]
+    [Range(0, 10)]
     public float alignmentPower;
-    [Range(0, 5)]
+    [Range(0, 10)]
     public float cohesionPower;
-    [Range(0, 5)]
+    [Range(0, 10)]
     public float separationPower;
     [Range(0, 180)]
     public float viewAngle;

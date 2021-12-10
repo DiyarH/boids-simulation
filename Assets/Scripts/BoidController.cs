@@ -26,7 +26,7 @@ public class BoidController : MonoBehaviour
                                         speed * Mathf.Cos(rigidbody.rotation * Mathf.PI / 180));
     }
 
-    public void UpdateVelocity()
+    private void Update()
     {
         if (transform.position.x < -9.2)
             transform.position = new Vector3(+9.1f, transform.position.y);
@@ -36,7 +36,12 @@ public class BoidController : MonoBehaviour
             transform.position = new Vector3(transform.position.x, +5.1f);
         if (transform.position.y > +5.2)
             transform.position = new Vector3(transform.position.x, -5.1f);
+        //transform.rotation.Set(0, 0, -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI, 0);
+        rigidbody.rotation = Vector2.SignedAngle(Vector2.up, rigidbody.velocity);
+    }
 
+    public void UpdateVelocity()
+    {
         var totalNeighborVelocity = Vector2.zero;
         var totalNeighborPosition = Vector2.zero;
         separationVelocity = Vector2.zero;
@@ -53,7 +58,7 @@ public class BoidController : MonoBehaviour
                 totalNeighborPosition += (Vector2)collision.gameObject.transform.position;
                 Vector2 distanceVector = collision.gameObject.transform.position - transform.position;
                 var distance = distanceVector.magnitude;
-                separationVelocity -= (1 / distance) * distanceVector.normalized;
+                separationVelocity -= (1 / (distance * distance)) * distanceVector.normalized;
             }
         }
         if (neighborBoidCount > 0)
@@ -66,6 +71,5 @@ public class BoidController : MonoBehaviour
             alignmentVelocity = Vector2.zero;
             cohesionVelocity = Vector2.zero;
         }
-        transform.rotation.Set(0, 0, -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI, 0);
     }
 }
