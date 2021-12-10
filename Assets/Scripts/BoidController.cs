@@ -13,6 +13,8 @@ public class BoidController : MonoBehaviour
     public float cohesionPower;
     [Range(0, 5)]
     public float separationPower;
+    [Range(0, 180)]
+    public float viewAngle;
     public Collider2D collider;
     ContactFilter2D contactFilter;
     [SerializeField]
@@ -28,8 +30,9 @@ public class BoidController : MonoBehaviour
 
         contactFilter = new ContactFilter2D();
         contactFilter.useTriggers = true;
-        //rigidbody.rotation = Random.Range(-180, 180);
-        transform.Rotate(0, 0, Random.Range(-180, 180));
+        rigidbody.rotation = Random.Range(-180, 180);
+        //transform.Rotate(0, 0, Random.Range(-180, 180));
+        //transform.LookAt(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)));
         rigidbody.velocity = (Vector2)transform.up * Random.Range(minInitialSpeed, maxInitialSpeed);
     }
 
@@ -79,6 +82,7 @@ public class BoidController : MonoBehaviour
             alignmentVelocity = Vector2.zero;
             cohesionVelocity = Vector2.zero;
         }
-        
+        //transform.LookAt(new Vector3(rigidbody.velocity.x, rigidbody.velocity.y));
+        rigidbody.rotation = -Mathf.Asin(rigidbody.velocity.normalized.x) * 180 / Mathf.PI;
     }
 }

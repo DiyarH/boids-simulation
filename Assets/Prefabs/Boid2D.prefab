@@ -73,6 +73,7 @@ MonoBehaviour:
   alignmentPower: 3
   cohesionPower: 1.5
   separationPower: 2.5
+  viewAngle: 0
   collider: {fileID: -8658171172659847412}
   alignmentVelocity: {x: 0, y: 0}
   cohesionVelocity: {x: 0, y: 0}

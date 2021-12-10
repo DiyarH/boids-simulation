@@ -236,7 +236,6 @@ MonoBehaviour:
   boidPrefab: {fileID: 2921195981298998432, guid: 495bace45ff3f774a8be91c18e5c8ae0,
     type: 3}
   boidCount: 100
-  spawningRadius: 2
 --- !u!4 &1650273607
 Transform:
   m_ObjectHideFlags: 0
@@ -245,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1650273605}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.16406229, y: 0.8491686, z: -0.97981787}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
