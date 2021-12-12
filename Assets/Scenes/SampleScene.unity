@@ -240,6 +240,8 @@ MonoBehaviour:
   cohesionPower: 1
   separationPower: 1
   totalPower: 1
+  noisePower: 0.1
+  noiseRange: 45
   useCustomVelocity: 1
   customVelocity: 2
   viewRadius: 1

@@ -14,6 +14,10 @@ public class BoidSpawner : MonoBehaviour
     public float separationPower;
     [Range(0, 10)]
     public float totalPower;
+    [Range(0, 1)]
+    public float noisePower;
+    [Range(0, 90)]
+    public float noiseRange;
     public bool useCustomVelocity;
     [Range(0, 5)]
     public float customVelocity;
@@ -48,7 +52,14 @@ public class BoidSpawner : MonoBehaviour
                             + boids[i].separationVelocity.normalized * separationPower;
         }
         for (int i = 0; i < boidCount; ++i)
+        {
             boids[i].rigidbody.velocity += accelerations[i] * totalPower * Time.deltaTime;
+            var speed = boids[i].rigidbody.velocity.magnitude;
+            var rotation = Vector2.SignedAngle(Vector2.up, boids[i].rigidbody.velocity);
+            var newRotation = rotation + Random.Range(-noiseRange, noiseRange);
+            boids[i].rigidbody.velocity += new Vector2(speed * -Mathf.Sin(newRotation * Mathf.PI / 180),
+                                        speed * Mathf.Cos(newRotation * Mathf.PI / 180)) * noisePower;
+        }
         if (useCustomVelocity)
         {
             for (int i = 0; i < boidCount; ++i)
