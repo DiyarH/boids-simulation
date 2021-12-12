@@ -14,6 +14,9 @@ public class BoidSpawner : MonoBehaviour
     public float separationPower;
     [Range(0, 10)]
     public float totalPower;
+    public bool useCustomVelocity;
+    [Range(0, 5)]
+    public float customVelocity;
     [Range(0, 2)]
     public float viewRadius;
     [Range(0, 180)]
@@ -46,5 +49,10 @@ public class BoidSpawner : MonoBehaviour
         }
         for (int i = 0; i < boidCount; ++i)
             boids[i].rigidbody.velocity += accelerations[i] * totalPower * Time.deltaTime;
+        if (useCustomVelocity)
+        {
+            for (int i = 0; i < boidCount; ++i)
+                boids[i].rigidbody.velocity = boids[i].rigidbody.velocity.normalized * customVelocity;
+        }
     }
 }

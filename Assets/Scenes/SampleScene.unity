@@ -240,6 +240,8 @@ MonoBehaviour:
   cohesionPower: 0
   separationPower: 0
   totalPower: 1
+  useCustomVelocity: 0
+  customVelocity: 1
   viewRadius: 0.5
   viewAngle: 0
 --- !u!4 &1650273607
