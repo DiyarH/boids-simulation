@@ -42,7 +42,7 @@ public class BoidSpawner : MonoBehaviour
     {
         for (int i = 0; i < boidCount; ++i)
         {
-            boids[i].UpdateVelocity();
+            boids[i].UpdateVelocity(viewAngle);
             accelerations[i] = boids[i].alignmentVelocity.normalized * alignmentPower
                             + boids[i].cohesionVelocity.normalized * cohesionPower
                             + boids[i].separationVelocity.normalized * separationPower;

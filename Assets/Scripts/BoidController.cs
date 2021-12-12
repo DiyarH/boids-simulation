@@ -40,7 +40,7 @@ public class BoidController : MonoBehaviour
         rigidbody.rotation = Vector2.SignedAngle(Vector2.up, rigidbody.velocity);
     }
 
-    public void UpdateVelocity()
+    public void UpdateVelocity(float viewAngle)
     {
         var totalNeighborVelocity = Vector2.zero;
         var totalNeighborPosition = Vector2.zero;
@@ -53,10 +53,13 @@ public class BoidController : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Boid"))
             {
+                Vector2 distanceVector = collision.gameObject.transform.position - transform.position;
+                var distanceAngle = Vector2.SignedAngle(rigidbody.velocity, distanceVector);
+                if (Mathf.Abs(distanceAngle) > viewAngle)
+                    continue;
                 ++neighborBoidCount;
                 totalNeighborVelocity += collision.gameObject.GetComponent<Rigidbody2D>().velocity;
                 totalNeighborPosition += (Vector2)collision.gameObject.transform.position;
-                Vector2 distanceVector = collision.gameObject.transform.position - transform.position;
                 var distance = distanceVector.magnitude;
                 separationVelocity -= (1 / (distance * distance)) * distanceVector.normalized;
             }
