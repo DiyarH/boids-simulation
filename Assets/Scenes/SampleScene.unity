@@ -236,14 +236,14 @@ MonoBehaviour:
   boidPrefab: {fileID: 2921195981298998432, guid: 495bace45ff3f774a8be91c18e5c8ae0,
     type: 3}
   boidCount: 100
-  alignmentPower: 0
-  cohesionPower: 0
-  separationPower: 0
+  alignmentPower: 2
+  cohesionPower: 1
+  separationPower: 1
   totalPower: 1
-  useCustomVelocity: 0
-  customVelocity: 1
-  viewRadius: 0.5
-  viewAngle: 180
+  useCustomVelocity: 1
+  customVelocity: 2
+  viewRadius: 1
+  viewAngle: 90
 --- !u!4 &1650273607
 Transform:
   m_ObjectHideFlags: 0
